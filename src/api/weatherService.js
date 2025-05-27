@@ -1,15 +1,21 @@
-// src/api/weatherService.js
-import axios from 'axios';
+const API_KEY = 'eb582a3bc91fad75efba224aea0e6cac'; // Replace with your actual OpenWeatherMap API key
 
-const API_KEY = "eb582a3bc91fad75efba224aea0e6cac";
-
-export const fetchWeather = async (city) => {
-  try {
-    const response = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error.response?.data?.message || error.message;
+export const getCurrentWeather = async (city) => {
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+  );
+  if (!response.ok) {
+    throw new Error('City not found');
   }
+  return response.json();
+};
+
+export const getForecast = async (lat, lon) => {
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+  );
+  if (!response.ok) {
+    throw new Error('Forecast data not found');
+  }
+  return response.json();
 };
